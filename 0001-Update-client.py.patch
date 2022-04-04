@@ -1,49 +1,91 @@
-From 034d452c21860764877f6fd51dc5feb511c5134f Mon Sep 17 00:00:00 2001
+From 8114d9f57a9594901898bcfff47f02fb0032554e Mon Sep 17 00:00:00 2001
 From: James Amattey <me@jamattey.com>
-Date: Mon, 14 Feb 2022 01:06:19 +0000
-Subject: [PATCH] Update client.py
+Date: Mon, 14 Feb 2022 02:31:47 +0000
+Subject: [PATCH] Added
 
-Create Patch File
 ---
- client.py | 11 ++++++++---
+ client_test.py | 56 +++++++++++++++++++++++++-------------------------
  1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/client.py b/client.py
-index 40badcd..dbb2e0f 100644
---- a/client.py
-+++ b/client.py
-@@ -35,14 +35,17 @@ def getDataPoint(quote):
- 	stock = quote['stock']
- 	bid_price = float(quote['top_bid']['price'])
- 	ask_price = float(quote['top_ask']['price'])
--	price = bid_price
-+	price = (bid_price + ask_price)/2
- 	return stock, bid_price, ask_price, price
+diff --git a/client_test.py b/client_test.py
+index 6c61c88..740a1c4 100644
+--- a/client_test.py
++++ b/client_test.py
+@@ -17,8 +17,8 @@ class ClientTest(unittest.TestCase):
+     ]
+     """ ------------ Add the assertion below ------------ """
  
- def getRatio(price_a, price_b):
- 	""" Get ratio of price_a and price_b """
- 	""" ------------- Update this function ------------- """
- 	""" Also create some unit tests for this function in client_test.py """
--	return 1
-+	if (price_b ==0):
-+		# when price_b is ), avoid throwing ZeroDivisitionError
-+		return
-+	return price_a/price_b
+-+ for quote in quotes;
+-+   self.assertEqual(getDataPoint(quote), (quote['stock'], quote['top_bid']['price'] + quote['top_ask']['price'], quote['top_bid']['price'] + quote['top_ask']['price'])/2))
++   for quote in quotes;
++     self.assertEqual(getDataPoint(quote), (quote['stock'], quote['top_bid']['price'] + quote['top_ask']['price'], quote['top_bid']['price'] + quote['top_ask']['price'])/2))
  
- # Main
- if __name__ == "__main__":
-@@ -52,8 +55,10 @@ if __name__ == "__main__":
- 		quotes = json.loads(urllib2.urlopen(QUERY.format(random.random())).read())
  
- 		""" ----------- Update to get the ratio --------------- """
-+		prices = {}
- 		for quote in quotes:
- 			stock, bid_price, ask_price, price = getDataPoint(quote)
-+			prices [stock] = price
- 			print "Quoted %s at (bid:%s, ask:%s, price:%s)" % (stock, bid_price, ask_price, price)
  
--		print "Ratio %s" % getRatio(price, price)
-+		print "Ratio %s" % getRatio(prices ['ABC'], prices ['DEF'])
+@@ -32,37 +32,37 @@ class ClientTest(unittest.TestCase):
+ 
+     """ ------------ Add the assertion below ------------ """
+ 
+-  + for quote in quotes:
++     for quote in quotes:
+     self.assertEqual(getDataPoint(quote), (quote['stock'], quote['top_bid']['price'] + quote['top_ask']['price'], quote['top_bid']['price'] + quote['top_ask']['price'])/2))
+ 
+ 
+     """ ------------ Add unit tests ------------ """
+ 
+-    + def test_getRatio_priceBZero(self):
+-    + price_a = 119.2
+-    + price_b = 0
+-    + self.assertIsNone (getRatio (price_a, price_b))
+-
+-    + def test_getRatio_priceAZero(self):
+-    + price_a = 0
+-    + price_b = 121.68
+-    + self.assertEqual (getRatio (price_a, price_b))
+-
+-
+-    + def test_getRatio_greaterThan1(self):
+-    + price_a = 346.48
+-    + price_b = 166.39
+-    + self.assertGreater (getRatio (price_a, price_b), 1)
+-    +
+-    + def test_getRatio_LessThan1(self):
+-    + price_a = 166.39
+-    + price_b = 356.48
+-    + self.assertLess (getRatio (price_a, price_b), 1)
+-    + 
+-    + def test_getRatio_exactlyOne(self):
+-    + price_a = 356.48
+-    + price_b = 356.48
+-    + self.assertEqual (getRatio (price_a, price_b))
++     def test_getRatio_priceBZero(self):
++     price_a = 119.2
++     price_b = 0
++     self.assertIsNone (getRatio (price_a, price_b))
++
++     def test_getRatio_priceAZero(self):
++     price_a = 0
++     price_b = 121.68
++    +self.assertEqual (getRatio (price_a, price_b))
++
++
++     def test_getRatio_greaterThan1(self):
++     price_a = 346.48
++     price_b = 166.39
++     self.assertGreater (getRatio (price_a, price_b), 1)
++    
++     def test_getRatio_LessThan1(self):
++     price_a = 166.39
++     price_b = 356.48
++     self.assertLess (getRatio (price_a, price_b), 1)
++     
++     def test_getRatio_exactlyOne(self):
++     price_a = 356.48
++     price_b = 356.48
++     self.assertEqual (getRatio (price_a, price_b))
+ 
+ 
+ 
 -- 
 2.34.1
 
